@@ -53,8 +53,6 @@ WORKDIR /root
 # 设置默认shell
 SHELL ["/usr/bin/zsh"]
 
-RUN conda init zsh
-
 EXPOSE 8888
     
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --ip 0.0.0.0 --no-browser --allow-root"]
