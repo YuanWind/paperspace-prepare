@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Color definitions
 
-export HF_ENDPOINT="https://hf-mirror.com"
+# export HF_ENDPOINT="https://hf-mirror.com"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
