@@ -12,3 +12,4 @@ docker push registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:v2
 ```
 
 # 可以用 yunpan
+参考：https://github.com/tickstep
