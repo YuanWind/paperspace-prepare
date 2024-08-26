@@ -45,9 +45,9 @@ RUN apt-get -y update && \
 
 
 
-RUN pip install --no-cache-dir jupyterlab ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector
+RUN pip install --no-cache-dir jupyterlab ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-RUN pip install huggingface_hub
+RUN pip install huggingface_hub -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
 RUN bash ~/paperspace-prepare/init_yunpan.sh
