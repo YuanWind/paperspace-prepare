@@ -51,7 +51,7 @@ RUN pip install huggingface_hub
 RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
 RUN bash ~/paperspace-prepare/init_yunpan.sh
 RUN echo "alias hfd='bash ~/paperspace-prepare/hfd.sh'" >> ~/.zshrc
-
+RUN echo "export PATH='/opt/conda/bin:$PATH'" >> ~/.zshrc
 # 设置默认工作目录
 # WORKDIR /root
 
