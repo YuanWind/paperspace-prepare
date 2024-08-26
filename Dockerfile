@@ -1,9 +1,10 @@
-# FROM nvcr.io/nvidia/pytorch:24.07-py3-igpu
+FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
 
-FROM m.daocloud.io/docker.io/continuumio/miniconda3:latest
+# FROM m.daocloud.io/docker.io/continuumio/miniconda3:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+COPY sources.list /etc/apt/sources.list
 # 更新软件包列表，并安装基本软件
 RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-tools iproute2
 
@@ -51,7 +52,9 @@ RUN pip install huggingface_hub
 RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
 RUN bash ~/paperspace-prepare/init_yunpan.sh
 RUN echo "alias hfd='bash ~/paperspace-prepare/hfd.sh'" >> ~/.zshrc
+
 RUN echo "export PATH='/opt/conda/bin:$PATH'" >> ~/.zshrc
+
 # 设置默认工作目录
 # WORKDIR /root
 
@@ -68,8 +71,10 @@ EXPOSE 8888
 RUN mkdir -p ~/.local/share
 RUN ln -s /storage/code-server ~/.local/share/code-server
 
-# 启动vscode-server脚本
-COPY vscode.sh /start_vscode.sh
+RUN conda init zsh
+
+COPY paperspace-prepare/vscode.sh /start_vscode.sh
+
 
 ENTRYPOINT ["/start_vscode.sh"]
 
