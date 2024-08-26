@@ -31,7 +31,7 @@ RUN echo '# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh. \n[[ 
 
 # 设置locale为中文UTF-8
 RUN apt-get -y update && \
-    apt-get install -y locales unzip && \
+    apt-get install -y locales unzip aria2 git-lfs curl && \
     echo "zh_CN.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen zh_CN.UTF-8 && \
     update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8
@@ -44,15 +44,33 @@ RUN apt-get -y update && \
 
 
 
-RUN pip install --no-cache-dir jupyterlab jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector 
+RUN pip install --no-cache-dir jupyterlab ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector
 
+RUN pip install huggingface_hub
+
+RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
+RUN bash ~/paperspace-prepare/init_yunpan.sh
+RUN echo "alias hfd='bash ~/paperspace-prepare/hfd.sh'" >> ~/.zshrc
 
 # 设置默认工作目录
-WORKDIR /root
+# WORKDIR /root
+
+# 安装vscode，依赖 ~/paperspace-prepare/vscode.sh
+COPY install.sh /vscode-install.sh
+RUN bash /vscode-install.sh
 
 # 设置默认shell
-SHELL ["/usr/bin/zsh"]
+RUN chsh -s $(which zsh)
 
 EXPOSE 8888
-    
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter lab --ip 0.0.0.0 --no-browser --allow-root"]
+
+# 将code-server的缓存路径改为paperspace的永久性存储路径
+RUN mkdir -p ~/.local/share
+RUN ln -s /storage/code-server ~/.local/share/code-server
+
+# 启动vscode-server脚本
+COPY vscode.sh /start_vscode.sh
+
+ENTRYPOINT ["/start_vscode.sh"]
+
+# CMD ["/usr/bin/code-server", "--bind-addr 0.0.0.0:8888", "."]
