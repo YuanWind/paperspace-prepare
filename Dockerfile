@@ -58,23 +58,24 @@ RUN echo "export PATH='/opt/conda/bin:$PATH'" >> ~/.zshrc
 # 设置默认工作目录
 # WORKDIR /root
 
-# 安装vscode，依赖 ~/paperspace-prepare/vscode.sh
-COPY install.sh /vscode-install.sh
-RUN bash /vscode-install.sh
-
 # 设置默认shell
 RUN chsh -s $(which zsh)
 
 EXPOSE 8888
+# ----------------- 使用VSCODE启动 -----------------------------
+# 安装vscode，依赖 /vscode-install.sh
+COPY install.sh /vscode-install.sh
+RUN bash /vscode-install.sh
 
 # 将code-server的缓存路径改为paperspace的永久性存储路径
 RUN mkdir -p ~/.local/share
 RUN ln -s /storage/code-server ~/.local/share/code-server
 
-
-COPY paperspace-prepare/vscode.sh /start_vscode.sh
-
+COPY vscode.sh /start_vscode.sh
 
 ENTRYPOINT ["/start_vscode.sh"]
+# ----------------- 使用VSCODE启动 -----------------------------
 
-# CMD ["/usr/bin/code-server", "--bind-addr 0.0.0.0:8888", "."]
+# ----------------- 使用jupyter启动 -----------------------------
+# CMD ["bash", "-c", "source ~/.bashrc && jupyter lab --ip 0.0.0.0 --no-browser --allow-root"]
+# ----------------- 使用VSCODE启动 -----------------------------
