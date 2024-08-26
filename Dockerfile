@@ -1,3 +1,8 @@
+
+# cuda和torch的dockers镜像：https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-23-07.html#rel-23-07
+# nvcr.io/nvidia/pytorch:23.07-py3
+# 可以看readme以方便国内同步和下载
+# 下面是已经同步好了的
 FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
 
 # FROM m.daocloud.io/docker.io/continuumio/miniconda3:latest
@@ -28,7 +33,8 @@ RUN sed -i 's/ZSH_THEME="agnoster"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~
 
 RUN sed -i '# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.\n# Initialization code that may require console input (password prompts, [y/n]\n# confirmations, etc.) must go above this block; everything else may go below.\nif [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then\n  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"\nfi' ~/.zshrc
 
-RUN echo '# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh. \n[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> ~/.zshrc
+RUN echo '# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh. ' >> ~/.zshrc
+RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> ~/.zshrc
 
 # 设置locale为中文UTF-8
 RUN apt-get -y update && \
