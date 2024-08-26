@@ -71,7 +71,6 @@ EXPOSE 8888
 RUN mkdir -p ~/.local/share
 RUN ln -s /storage/code-server ~/.local/share/code-server
 
-RUN conda init zsh
 
 COPY paperspace-prepare/vscode.sh /start_vscode.sh
 
