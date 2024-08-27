@@ -3,19 +3,19 @@
 # nvcr.io/nvidia/pytorch:23.07-py3
 # 可以看readme以方便国内同步和下载
 # 下面是已经同步好了的
-FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
-
+# FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
+FROM nvcr.io/nvidia/pytorch:23.07-py3
 # FROM m.daocloud.io/docker.io/continuumio/miniconda3:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+# 替换清华源
 COPY sources.list /etc/apt/sources.list
 # 更新软件包列表，并安装基本软件
 RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-tools iproute2
 
 # 安装ohmyzsh，并加入插件 zsh-syntax-highlighting 和 zsh-autosuggestions
-RUN apt-get -y update && apt-get install -y zsh && \
-    apt install -y python3-pip && pip3 install --upgrade pip
+RUN apt-get -y update && apt-get install -y zsh
 
 RUN git clone  --depth=1 https://gitee.com/lqhhhhhh/ohmyzsh  ~/.oh-my-zsh && \
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc && \
@@ -52,10 +52,9 @@ RUN apt-get -y update && \
 
 
 RUN pip install --no-cache-dir jupyterlab ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install huggingface_hub gpustat -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-RUN pip install huggingface_hub -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
+RUN git clone https://github.com/YuanWind/paperspace-prepare ~/paperspace-prepare
 RUN bash ~/paperspace-prepare/init_yunpan.sh
 RUN echo "alias hfd='bash ~/paperspace-prepare/hfd.sh'" >> ~/.zshrc
 
