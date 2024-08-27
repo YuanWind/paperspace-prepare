@@ -17,14 +17,14 @@ RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-
 # 安装ohmyzsh，并加入插件 zsh-syntax-highlighting 和 zsh-autosuggestions
 RUN apt-get -y update && apt-get install -y zsh
 
-RUN git clone  --depth=1 https://gitee.com/lqhhhhhh/ohmyzsh  ~/.oh-my-zsh && \
+RUN git clone  --depth=1 https://github.com/ohmyzsh/ohmyzsh.git  ~/.oh-my-zsh && \
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc && \
     sed -i 's/robbyrussell/agnoster/g' ~/.zshrc && \
     sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/g' ~/.zshrc
 
-RUN git clone --depth=1 https://gitee.com/di2344/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k && \
-    git clone https://gitee.com/di2344/zsh-syntax-highlighting  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
-    git clone https://gitee.com/czyczk/zsh-autosuggestions  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
     git clone https://gitee.com/YuanWind/p10k ~/.oh-my-zsh/p10k_config
 
 RUN cp ~/.oh-my-zsh/p10k_config/.p10k.zsh ~/.p10k.zsh
@@ -69,18 +69,18 @@ RUN chsh -s $(which zsh)
 EXPOSE 8888
 # ----------------- 使用VSCODE启动 -----------------------------
 # 安装vscode，依赖 /vscode-install.sh
-COPY install.sh /vscode-install.sh
-RUN bash /vscode-install.sh
+# COPY install.sh /vscode-install.sh
+# RUN bash /vscode-install.sh
 
-# 将code-server的缓存路径改为paperspace的永久性存储路径
-RUN mkdir -p ~/.local/share
-RUN ln -s /storage/code-server ~/.local/share/code-server
+# # 将code-server的缓存路径改为paperspace的永久性存储路径
+# RUN mkdir -p ~/.local/share
+# RUN ln -s /storage/code-server ~/.local/share/code-server
 
-COPY vscode.sh /start_vscode.sh
+# COPY vscode.sh /start_vscode.sh
 
-ENTRYPOINT ["/start_vscode.sh"]
+# ENTRYPOINT ["/start_vscode.sh"]
 # ----------------- 使用VSCODE启动 -----------------------------
 
 # ----------------- 使用jupyter启动 -----------------------------
-# CMD ["bash", "-c", "source ~/.bashrc && jupyter lab --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source ~/.bashrc && jupyter lab --ip 0.0.0.0 --no-browser --allow-root"]
 # ----------------- 使用VSCODE启动 -----------------------------
