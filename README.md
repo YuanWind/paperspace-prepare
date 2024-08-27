@@ -22,7 +22,7 @@ docker tag paperspace:v8 docker.io/wind999/paperspace:v8
 docker push docker.io/wind999/paperspace:v8
 ```
 ## 版本记录
-docker.io/wind999/paperspace:v7  cuda121 + torch2.1 + vscode
+docker.io/wind999/paperspace:v7  cuda121 + torch2.1 + vscode  
 docker.io/wind999/paperspace:v8  cuda121 + torch2.1 + jupyter
 
 # hf-hub 功能
