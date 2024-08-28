@@ -15,16 +15,25 @@ sudo ln -s /tmp/docker/image /var/lib/docker/image
 sudo mv /var/lib/docker/overlay2 /tmp/docker/overlay2
 sudo ln -s /tmp/docker/overlay2 /var/lib/docker/overlay2
 
-# 构建镜像并推送
-docker build -t paperspace:v8 -f Dockerfile . --platform=linux/amd64
+# 构建镜像并推送docker.io
+docker build -t paperspace:121.21.vscode.forge -f Dockerfile . --platform=linux/amd64
 docker login --username=wind999
-docker tag paperspace:v8 docker.io/wind999/paperspace:v8
+docker tag paperspace:121.21.vscode.forge docker.io/wind999/paperspace:121.21.vscode.forge
 docker push docker.io/wind999/paperspace:v8
+
+# 构建镜像并推送aliyun
+docker login --username=windyuan99 registry.cn-hangzhou.aliyuncs.com
+docker tag paperspace:121.21.vscode.forge registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.forge
+docker push registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.forge
+
+
 ```
 ## 版本记录
 `docker.io/wind999/paperspace:v7`  cuda121 + torch2.1 + vscode  
 `docker.io/wind999/paperspace:v8`  cuda121 + torch2.1 + jupyter  
 `registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:v9`  cuda121 + torch2.1 + vscode + miniconda  
+`registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.forge`  cuda121 + torch2.1 + vscode + miniforge  
+
 
 # hf-hub 功能
 参考 https://huggingface.co/docs/huggingface_hub/main/en/guides/upload
