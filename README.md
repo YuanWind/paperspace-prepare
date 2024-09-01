@@ -16,10 +16,10 @@ sudo mv /var/lib/docker/overlay2 /tmp/docker/overlay2
 sudo ln -s /tmp/docker/overlay2 /var/lib/docker/overlay2
 
 # 构建镜像并推送docker.io
-docker build -t paperspace:121.21.vscode.forge -f Dockerfile . --platform=linux/amd64
+docker build -t paperspace:121.21.auto -f Dockerfile . --platform=linux/amd64
 docker login --username=wind999
-docker tag paperspace:121.21.vscode.forge docker.io/wind999/paperspace:121.21.vscode.forge
-docker push docker.io/wind999/paperspace:v8
+docker tag paperspace:121.21.auto docker.io/wind999/paperspace:121.21.auto.v1
+docker push docker.io/wind999/paperspace:121.21.auto
 
 # 构建镜像并推送aliyun
 docker login --username=windyuan99 registry.cn-hangzhou.aliyuncs.com
