@@ -33,6 +33,8 @@ docker push registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.fo
 `docker.io/wind999/paperspace:v8`  cuda121 + torch2.1 + jupyter  
 `registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:v9`  cuda121 + torch2.1 + vscode + miniconda  
 `registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.forge`  cuda121 + torch2.1 + vscode + miniforge  
+`registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.auto`  cuda121 + torch2.1 + auto(jupyter or vscode)  
+`docker.io/wind999/paperspace:121.21.auto`  cuda121 + torch2.1 + auto(jupyter or vscode)  
 
 
 # hf-hub 功能
