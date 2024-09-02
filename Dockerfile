@@ -3,28 +3,28 @@
 # nvcr.io/nvidia/pytorch:23.07-py3
 # 可以看readme以方便国内同步和下载
 # 下面是已经同步好了的
-FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
-
+# FROM registry.cn-hangzhou.aliyuncs.com/yywind/pytorch:23.07-py3
+FROM nvcr.io/nvidia/pytorch:23.07-py3
 # FROM m.daocloud.io/docker.io/continuumio/miniconda3:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+# 替换清华源
 COPY sources.list /etc/apt/sources.list
 # 更新软件包列表，并安装基本软件
 RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-tools iproute2
 
 # 安装ohmyzsh，并加入插件 zsh-syntax-highlighting 和 zsh-autosuggestions
-RUN apt-get -y update && apt-get install -y zsh && \
-    apt install -y python3-pip && pip3 install --upgrade pip
+RUN apt-get -y update && apt-get install -y zsh
 
-RUN git clone  --depth=1 https://gitee.com/lqhhhhhh/ohmyzsh  ~/.oh-my-zsh && \
+RUN git clone  --depth=1 https://github.com/ohmyzsh/ohmyzsh.git  ~/.oh-my-zsh && \
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc && \
     sed -i 's/robbyrussell/agnoster/g' ~/.zshrc && \
     sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/g' ~/.zshrc
 
-RUN git clone --depth=1 https://gitee.com/di2344/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k && \
-    git clone https://gitee.com/di2344/zsh-syntax-highlighting  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
-    git clone https://gitee.com/czyczk/zsh-autosuggestions  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
     git clone https://gitee.com/YuanWind/p10k ~/.oh-my-zsh/p10k_config
 
 RUN cp ~/.oh-my-zsh/p10k_config/.p10k.zsh ~/.p10k.zsh
@@ -50,15 +50,13 @@ RUN apt-get -y update && \
     dpkg-reconfigure -f noninteractive tzdata
 
 
+RUN apt install nodejs npm
+RUN pip install --no-cache-dir jupyterlab jupyterlab-language-pack-zh-CN  jupyter_contrib_nbextensions ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install huggingface_hub gpustat -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-RUN pip install --no-cache-dir jupyterlab ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-RUN pip install huggingface_hub -i https://pypi.tuna.tsinghua.edu.cn/simple
-
-RUN git clone https://gitee.com/YuanWind/paperspace-prepare ~/paperspace-prepare
+RUN git clone https://github.com/YuanWind/paperspace-prepare ~/paperspace-prepare
 RUN bash ~/paperspace-prepare/init_yunpan.sh
 RUN echo "alias hfd='bash ~/paperspace-prepare/hfd.sh'" >> ~/.zshrc
-
 RUN echo "export PATH='/opt/conda/bin:$PATH'" >> ~/.zshrc
 
 # 设置默认工作目录
@@ -67,15 +65,44 @@ RUN echo "export PATH='/opt/conda/bin:$PATH'" >> ~/.zshrc
 # 设置默认shell
 RUN chsh -s $(which zsh)
 
+# 安装 nodejs，jupyter lab的插件要用
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+RUN echo "export NVM_DIR='/usr/local/nvm'" >> ~/.zshrc
+# download and install Node.js (you may need to restart the terminal)
+RUN source ~/.bashrc
+# RUN ls /usr/local/nvm apt
+RUN bash /usr/local/nvm/nvm.sh install 22
+# verifies the right Node.js version is in the environment
+# RUN node -v # should print `v22.7.0`
+# # verifies the right npm version is in the environment
+# RUN npm -v # should print `10.8.2`
+
+#安装jupyter必要插件
+RUN pip install yapf
+RUN jupyter contrib nbextension install --system
+RUN jupyter nbextension enable code_prettify/code_prettify --system
+RUN jupyter nbextension enable collapsible_headings/main --system
+RUN jupyter nbextension enable execute_time/ExecuteTime --system
+RUN jupyter nbextension enable hinterland/hinterland --system
+RUN jupyter nbextension enable toggle_all_line_numbers/main --system
+RUN jupyter nbextension enable autoscroll/main --system
+RUN pip install jupyter_latex_envs --upgrade
+RUN jupyter nbextension install --py latex_envs --system
+RUN jupyter nbextension install https://rawgit.com/jfbercher/jupyter_nbTranslate/master/nbTranslate.zip --system
+RUN jupyter nbextension enable nbTranslate/main
+RUN jupyter nbextension install https://rawgit.com/jfbercher/small_nbextensions/master/highlighter.zip  --system
+
+
 EXPOSE 8888
 # ----------------- 使用VSCODE启动 -----------------------------
 # 安装vscode，依赖 /vscode-install.sh
 COPY install.sh /vscode-install.sh
 RUN bash /vscode-install.sh
 
-# 将code-server的缓存路径改为paperspace的永久性存储路径
+# 将code-server的缓存路径改为paperspace的永久性存储路径， jupyter的缓存路径也放里边。
 RUN mkdir -p ~/.local/share
-RUN ln -s /storage/code-server ~/.local/share/code-server
+RUN ln -s /storage/.local/share/code-server ~/.local/share/code-server
+# RUN ln -s /storage/.local/share/jupyter ~/.local/share/jupyter
 
 COPY vscode.sh /start_vscode.sh
 
