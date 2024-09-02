@@ -50,7 +50,7 @@ RUN apt-get -y update && \
     dpkg-reconfigure -f noninteractive tzdata
 
 
-
+RUN apt install nodejs npm
 RUN pip install --no-cache-dir jupyterlab jupyterlab-language-pack-zh-CN  jupyter_contrib_nbextensions ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install huggingface_hub gpustat -i https://pypi.tuna.tsinghua.edu.cn/simple
 
