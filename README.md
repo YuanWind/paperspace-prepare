@@ -14,6 +14,8 @@ sudo mv /var/lib/docker/image /tmp/docker/image
 sudo ln -s /tmp/docker/image /var/lib/docker/image
 sudo mv /var/lib/docker/overlay2 /tmp/docker/overlay2
 sudo ln -s /tmp/docker/overlay2 /var/lib/docker/overlay2
+sudo mv /var/lib/docker/buildkit /tmp/docker/buildkit
+sudo ln -s /tmp/docker/buildkit /var/lib/docker/buildkit
 
 # 构建镜像并推送docker.io
 docker build -t mytrtserver:24.05-trtllm-python-py3 -f Dockerfile . --platform=linux/amd64
