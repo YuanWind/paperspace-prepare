@@ -1,4 +1,4 @@
-
+# nvcr.io/nvidia/tritonserver:24.05-vllm-python-py3
 FROM nvcr.io/nvidia/tritonserver:24.05-trtllm-python-py3
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # 替换清华源
 COPY sources.list /etc/apt/sources.list
 # 更新软件包列表，并安装基本软件
-RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-tools iproute2
+RUN apt-get -y update && apt-get install -y vim htop tmux git ssh wget curl net-tools iproute2 sudo
 
 # 安装ohmyzsh，并加入插件 zsh-syntax-highlighting 和 zsh-autosuggestions
 RUN apt-get -y update && apt-get install -y zsh
@@ -20,6 +20,8 @@ RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zs
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
     git clone https://github.com/zsh-users/zsh-autosuggestions.git  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
     git clone https://gitee.com/YuanWind/p10k ~/.oh-my-zsh/p10k_config
+
+RUN rm /etc/apt/apt.conf.d/20packagekit
 
 RUN cp ~/.oh-my-zsh/p10k_config/.p10k.zsh ~/.p10k.zsh
 
@@ -41,7 +43,7 @@ RUN apt-get -y update && \
     dpkg-reconfigure -f noninteractive tzdata
 
 
-RUN apt install nodejs npm
+RUN apt install -y nodejs npm
 RUN pip install --no-cache-dir jupyterlab jupyterlab-language-pack-zh-CN  jupyter_contrib_nbextensions ipywidgets jupyterlab-topbar jupyterlab-system-monitor lckr-jupyterlab-variableinspector -i https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install huggingface_hub gpustat -i https://pypi.tuna.tsinghua.edu.cn/simple
 
