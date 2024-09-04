@@ -30,3 +30,12 @@ docker push registry.cn-hangzhou.aliyuncs.com/yywind/paperspace:121.21.vscode.fo
 
 
 ```
+
+## hf-hub 功能
+参考 https://huggingface.co/docs/huggingface_hub/main/en/guides/upload
+```
+pip install huggingface_hub gpustat -i https://pypi.tuna.tsinghua.edu.cn/simple
+huggingface-cli login
+huggingface-cli upload yywind/paperspace xxx
+
+```
